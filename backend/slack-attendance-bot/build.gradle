@@ -23,13 +23,22 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.7.1' // 쿼리 파라미터를 로그로 남기는 외부 라이브러리
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0' // 쿼리 파라미터를 로그로 남기는 외부 라이브러리
     runtimeOnly 'com.h2database:h2'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    // Slack 관련
+    implementation 'com.slack.api:bolt:1.24.0'
+    implementation 'com.slack.api:bolt-servlet:1.24.0'
+    implementation 'com.slack.api:bolt-jetty:1.24.0'
+    // spring security oauth2.0 지원 포함, OAuth2/Open Id Connect 클라이언트 설정을 위한 스프링 부트 자동 구성 제공
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'com.auth0:java-jwt:3.18.3'
+
+
 }
 
 tasks.named('test') {

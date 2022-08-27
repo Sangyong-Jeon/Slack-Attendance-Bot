@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CustomAccessTokenResponseConverter implements Converter<Map<String, Object>, OAuth2AccessTokenResponse> {
+
     private static final Set<String> TOKEN_RESPONSE_PARAMETER_NAMES = Stream.of(
             OAuth2ParameterNames.ACCESS_TOKEN,
             OAuth2ParameterNames.TOKEN_TYPE,
@@ -29,6 +30,13 @@ public class CustomAccessTokenResponseConverter implements Converter<Map<String,
         String accessToken = authed_user.get("access_token");
         // 아래는 봇 토큰
 //        String accessToken = (String) tokenResponseParameters.get(OAuth2ParameterNames.ACCESS_TOKEN);
+
+        // 슬랙 토큰값 출력
+        System.out.println("봇 Access Token = " + (String) tokenResponseParameters.get(OAuth2ParameterNames.ACCESS_TOKEN));
+        System.out.println("사용자 Access Token = " + accessToken);
+        System.out.println("봇 ID = " + (String) tokenResponseParameters.get("bot_user_id"));
+        System.out.println("앱 ID = " + (String) tokenResponseParameters.get("app_id"));
+        System.out.println("사용자 ID = " + (String) authed_user.get("id"));
 
         // 슬랙 API는 access_token에 "Bearer"가 없는 토큰값이기 때문에 명시해준다.
         OAuth2AccessToken.TokenType accessTokenType = OAuth2AccessToken.TokenType.BEARER;

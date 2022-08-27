@@ -23,27 +23,18 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        System.out.println("OAuth RegistrationId = " + userRequest.getClientRegistration());
-        System.out.println("getAccessToken = " + userRequest.getAccessToken().getTokenValue());
-
         OAuth2User oAuth2User = super.loadUser(userRequest);
-        System.out.println("attributes = " + oAuth2User.getAttributes());
-
         OAuth2UserInfo oAuth2UserInfo = new SlackUserInfo(oAuth2User.getAttributes());
         log.info("PrincipalOauth2UserService : 슬랙 로그인 요청");
-
-        String uuid = UUID.randomUUID().toString().substring(0, 6);
-
         Member member = memberRepository.findByProviderId(oAuth2UserInfo.getProviderId())
                 .orElseGet(() -> Member.builder()
                         .email(oAuth2UserInfo.getEmail())
                         .name(oAuth2UserInfo.getName())
                         .provider(oAuth2UserInfo.getProvider())
                         .providerId(oAuth2UserInfo.getProviderId())
-                        .password(bCryptPasswordEncoder.encode("snsMember" + uuid))
+                        .password(bCryptPasswordEncoder.encode("snsMember" + UUID.randomUUID().toString().substring(0, 6))) // 임시 비밀번호
                         .role("ROLE_MEMBER")
                         .build());
-
         return new PrincipalDetails(member, oAuth2User.getAttributes());
     }
 }

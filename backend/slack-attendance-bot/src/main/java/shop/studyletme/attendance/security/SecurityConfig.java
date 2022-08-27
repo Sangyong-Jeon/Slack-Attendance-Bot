@@ -47,14 +47,11 @@ public class SecurityConfig {
         OAuth2AccessTokenResponseHttpMessageConverter tokenResponseHttpMessageConverter = new OAuth2AccessTokenResponseHttpMessageConverter();
         // 토큰 응답 처리를 커스터마이징하기 위해 CustomAccessTokenResponseConverter 구현
         tokenResponseHttpMessageConverter.setAccessTokenResponseConverter(new CustomAccessTokenResponseConverter());
-
         RestTemplate restTemplate = new RestTemplate(Arrays.asList(new FormHttpMessageConverter(), tokenResponseHttpMessageConverter));
         restTemplate.setErrorHandler(new OAuth2ErrorResponseErrorHandler());
-
         // 토큰 응답 처리를 커스터마이징함
         DefaultAuthorizationCodeTokenResponseClient accessTokenResponseClient = new DefaultAuthorizationCodeTokenResponseClient();
         accessTokenResponseClient.setRestOperations(restTemplate);
         return accessTokenResponseClient;
     }
-
 }

@@ -37,19 +37,9 @@ public class SlackService {
     public void postSlackMessage(String message) {
         try {
             MethodsClient methods = Slack.getInstance().methods(token);
-            ChatPostMessageResponse response = methods.chatPostMessage(req -> req
+            methods.chatPostMessage(req -> req
                     .channel(channel) // channel 필드에 channel id 말고 user id를 넣으면 개인 DM으로 메시지 보내짐
                     .text(message));
-
-            log.info("메시지 보냄");
-
-            if (response.isOk()) {
-                Message responseMessage = response.getMessage();
-                System.out.println(response);
-                System.out.println(response.getMessage());
-            } else {
-                String errorCode = response.getError(); // e.g., "invalid_auth", "channel_not_found"
-            }
         } catch (SlackApiException e) {
             // Slack API responded with unsuccessful status code (!= 20x)
             // Slack API가 실패한 상태 코드로 응답함(20x 아님)
@@ -66,12 +56,7 @@ public class SlackService {
         try {
             MethodsClient methods = Slack.getInstance().methods(token);
             UsersListResponse usersListResponse = methods.usersList(req -> req.token(token));
-            System.out.println(usersListResponse);
-            System.out.println(usersListResponse.getMembers());
-            List<User> members = usersListResponse.getMembers();
-            for (User member : members) {
-                System.out.println("member = " + member);
-            }
+            usersListResponse.getMembers().forEach(u -> System.out.printf("member id : %s | name : %s | email : %s\n", u.getId(), u.getName(), u.getProfile().getEmail()));
         } catch (SlackApiException e) {
             log.error(e.getMessage());
         } catch (IOException e) {
@@ -95,7 +80,6 @@ public class SlackService {
             OpenIDConnectUserInfoResponse userInfoResponse = methods.openIDConnectUserInfo(req -> req.token(tokenResponse.getAccessToken()));
             System.out.println("userInfoResponse = " + userInfoResponse);
             // 로그인 로직 수행하기 (JWT 토큰, 쿠키, 세션 등)
-            
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SlackApiException e) {
